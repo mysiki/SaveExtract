@@ -18,13 +18,17 @@ python extract.py
 
 # Game name mode: outputs to out/<Game Name>/<TitleID>/
 python extract.py --game-names
+
+# Game name mode without edition suffixes (Switch 2 games use same folder as Switch):
+python extract.py --game-names --strip-edition
 ```
 
 ### Options
 
-| Flag           | Description                                                                                                                                  |
-| -------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
-| `--game-names` | Organize saves by game name using the [titledb](https://github.com/blawar/titledb) database. Downloads `US.en.json` automatically if needed. |
+| Flag              | Description                                                                                                                                  |
+| ----------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| `--game-names`    | Organize saves by game name using the [titledb](https://github.com/blawar/titledb) database. Downloads `US.en.json` automatically if needed. |
+| `--strip-edition` | Remove edition suffixes (e.g. ` – Nintendo Switch 2 Edition`) from game names, so Switch and Switch 2 versions share the same folder.        |
 
 ### Output structure
 

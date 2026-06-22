@@ -33,8 +33,10 @@ def loadTitleDb(path="US.en.json") -> dict:
             lookup[tid.upper()] = name
     return lookup
 
-def sanitizeDirName(name: str) -> str:
+def sanitizeDirName(name: str, strip_edition: bool = False) -> str:
     """Sanitize game name for path use, matching JKSV behavior (strip non-ASCII and invalid chars)."""
+    if strip_edition:
+        name = re.sub(r'\s*[–-]\s*Nintendo Switch\s*\d*\s*Edition', '', name)
     # Remove non-ASCII characters (™, ®, ©, etc.)
     name = name.encode("ascii", "ignore").decode("ascii")
     # Remove filesystem-invalid characters
@@ -92,6 +94,8 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Extract Nintendo Switch save files.")
     parser.add_argument("--game-names", action="store_true",
                         help="Organize output by game name (out/<game name>/<ID>/) instead of just ID")
+    parser.add_argument("--strip-edition", action="store_true",
+                        help="Remove edition suffixes (e.g. ' – Nintendo Switch 2 Edition') from game names")
     args = parser.parse_args()
 
     hactoolPrep()
@@ -115,7 +119,7 @@ if __name__ == "__main__":
             if args.game_names:
                 gameName = titleDb.get(titleId)
                 if gameName:
-                    gameName = sanitizeDirName(gameName)
+                    gameName = sanitizeDirName(gameName, strip_edition=args.strip_edition)
                     destDir = f"out/{gameName}/{titleId}"
                 else:
                     print(f"  Warning: Title ID {titleId} not found in title database")
